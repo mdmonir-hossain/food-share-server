@@ -35,6 +35,11 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/food", async (req, res) => {
+        const cursor = foodCollection.find().limit(6).sort({"expiredDate": -1});
+        const result = await cursor.toArray();
+        res.send(result);
+      });
     
 
     // Send a ping to confirm a successful connection
