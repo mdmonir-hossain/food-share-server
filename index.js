@@ -27,7 +27,48 @@ async function run() {
     const foodCollection = client.db("fooddb").collection("food");
     const requestfoodCollection = client.db("fooddb").collection("requestfood");
    
-    
+    app.put("/Updatefood/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatefood = req.body;
+      const foods = {
+        $set: {
+          name: updateProducts.name,
+          image: updateProducts.image,
+          brandname: updateProducts.brandname,
+          type: updateProducts.type,
+          price: updateProducts.price,
+          rating: updateProducts.rating,
+          description: updateProducts.description,
+
+          additionalNotes:updateProducts.additionalNotes,
+
+donatorEmail:updatefood.donatorEmail,
+
+donatorImage:updatefood.donatorImage,
+
+donatorName:updatefood.donatorName,
+
+expiredDate:updatefood.expiredDate,
+
+foodImage:updatefood.foodImage,
+
+foodName:updatefood
+.foodName,
+
+foodQuantity:updatefood.foodQuantity,
+
+foodStatus:updatefood.foodQuantity,
+
+pickupLocation:updatefood.pickupLocation,
+
+        },
+      };
+      const result = await foodCollection.updateOne(filter,foods,options);
+
+      res.send(result);
+    });
 
     app.post("/food", async (req, res) => {
       const addfood = req.body;
@@ -53,6 +94,7 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
       });
+
     app.get("/requestfood", async (req, res) => {
         const cursor = requestfoodCollection.find();
         const result = await cursor.toArray();
@@ -63,6 +105,12 @@ async function run() {
         const id = req.params.id;
         const query = { _id:new ObjectId(id)  }
         const result = await requestfoodCollection.deleteOne(query);
+        res.send(result);
+      });
+      app.delete("/Delete/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id:new ObjectId(id)  }
+        const result = await foodCollection.deleteOne(query);
         res.send(result);
       });
     // Send a ping to confirm a successful connection
