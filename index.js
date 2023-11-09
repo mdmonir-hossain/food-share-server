@@ -25,6 +25,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
 
     const foodCollection = client.db("fooddb").collection("food");
+    const requestfoodCollection = client.db("fooddb").collection("requestfood");
    
     
 
@@ -34,9 +35,26 @@ async function run() {
       const result = await foodCollection.insertOne(addfood);
       res.send(result);
     });
+    app.post("/requestfood", async (req, res) => {
+      const addrequestfood = req.body;
+      console.log(addrequestfood);
+      const result = await requestfoodCollection.insertOne(addrequestfood);
+      res.send(result);
+    });
 
     app.get("/food", async (req, res) => {
-        const cursor = foodCollection.find().limit(6).sort({"expiredDate": -1});
+        const cursor = foodCollection.find().limit(6).sort({foodQuantity:-1});
+        const result = await cursor.toArray();
+        res.send(result);
+      });
+
+    app.get("/foodall", async (req, res) => {
+        const cursor = foodCollection.find().sort({expiredDate:1});
+        const result = await cursor.toArray();
+        res.send(result);
+      });
+    app.get("/requestfood", async (req, res) => {
+        const cursor = requestfoodCollection.find();
         const result = await cursor.toArray();
         res.send(result);
       });
